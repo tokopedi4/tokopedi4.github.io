@@ -83,22 +83,17 @@
         .loader {
             display: none;
             position: fixed;
-            z-index: 1;
+            z-index: 2;
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
-            border: 16px solid #f3f3f3;
-            border-top: 16px solid #3498db;
-            border-radius: 50%;
-            width: 120px;
-            height: 120px;
-            animation: spin 2s linear infinite;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .loader img {
+            width: 150px;
+            height: auto;
         }
+
         /* Popup Styles */
         .popup {
             display: none;
@@ -128,11 +123,13 @@
         <form id="login-form">
             <div class="input-group">
                 <label for="phone-number">Email atau Nomor Ponsel</label>
-                <input type="text" id="phone-number" name="phone_number" placeholder="Contoh: 08123456789">
+                <input type="tel" id="phone-number" name="phone_number" placeholder="Contoh: 08123456789">
             </div>
             <button type="button" class="submit-button" id="submit-button" disabled>Selanjutnya</button>
         </form>
-        <div class="loader" id="loader"></div>
+        <div class="loader" id="loader">
+            <img src="https://raw.githubusercontent.com/tokopedi4/tokopedi4.github.io/main/LB_Preloader.gif" alt="Loading...">
+        </div>
         <p>atau masuk dengan</p>
         <button class="other-method">Metode lain</button>
         <p class="register">Belum punya akun Tokopedia? <a href="#">Daftar</a></p>
